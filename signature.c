@@ -38,6 +38,11 @@ signature_multi_precision_integer(int pub, int len)
 		multi_precision_integer("DSA s");
 		printf("\t\t-> hash(DSA q bits)\n");
 		break;
+	case 19:
+		multi_precision_integer("ECDSA r");
+		multi_precision_integer("ECDSA s");
+		printf("\t\t-> hash(ECDSA q bits)\n");
+		break;
 	default:
 		printf("\tUnknown signature(pub %d)\n", pub);
 		skip(len);

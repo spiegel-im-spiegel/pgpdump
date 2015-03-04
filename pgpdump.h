@@ -92,7 +92,8 @@ public void key_expiration_time4(string);
 public void ver(int, int, int);
 public int string_to_key(void);
 public void multi_precision_integer(string);
-	
+public void ecc_curve_name(string);
+
 /*
  * tagfunc.c
  */

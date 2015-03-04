@@ -60,6 +60,10 @@ Public_Key_Encrypted_Session_Key_Packet(int len)
 		multi_precision_integer("DSA ?");
 		multi_precision_integer("DSA ?");
 		break;
+	case 18:
+		printf("\tECDH(pub %d)\n", pub);
+		skip(len - 10);
+		break;
 	default:
 		printf("\t\tunknown(pub %d)\n", pub);
 		skip(len - 10);

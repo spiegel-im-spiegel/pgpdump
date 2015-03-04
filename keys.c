@@ -79,6 +79,12 @@ new_Public_Key_Packet(int len)
 		multi_precision_integer("DSA g");
 		multi_precision_integer("DSA y");
 		break;
+	case 18:
+		ecc_curve_name("ECDH");
+		break;
+	case 19:
+		ecc_curve_name("ECDSA");
+		break;
 	default:
 		printf("\tUnknown public key(pub %d)\n", PUBLIC);
 		skip(len - 5);
@@ -169,6 +175,12 @@ plain_Secret_Key(int len)
 		case 17:
 			multi_precision_integer("DSA x");
 			break;
+		case 18:
+			multi_precision_integer("ECDH x");
+			break;
+		case 19:
+			multi_precision_integer("ECDSA x");
+			break;
 		default:
 			printf("\tUnknown secret key(pub %d)\n", PUBLIC);
 			skip(len - 2);
@@ -220,6 +232,12 @@ encrypted_Secret_Key(int len, int sha1)
 			break;
 		case 17:
 			printf("\tEncrypted DSA x\n");
+			break;
+		case 18:
+			printf("\tEncrypted ECDH x\n");
+			break;
+		case 19:
+			printf("\tEncrypted ECDSA x\n");
 			break;
 		default:
 			printf("\tUnknown encrypted key(pub %d)\n", PUBLIC);

@@ -52,8 +52,8 @@ PUB_ALGS[] = {
 	"unknown(pub 15)",
 	"ElGamal Encrypt-Only(pub 16)",
 	"DSA Digital Signature Algorithm(pub 17)",
-	"Reserved for Elliptic Curve(pub 18)",
-	"Reserved for ECDSA(pub 19)",
+	"ECDH public key algorithm(pub 18)",
+	"ECDSA public key algorithm(pub 19)",
 	"Reserved formerly ElGamal Encrypt or Sign(pub 20)",
 	"Reserved for Diffie-Hellman (pub 21)",
 };
@@ -392,6 +392,41 @@ multi_precision_integer(string str)
 	printf("\n");
 }
 
+#define ECC_CURVE_OID_MAX_LEN 10 /* reserved for Brainpool */
+
+private struct {
+	int len;
+	unsigned char oid[ECC_CURVE_OID_MAX_LEN];
+	string name;
+} CURVE_OIDS[] = {
+	{8, { 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x03, 0x01, 0x07, 0x00, 0x00 }, "NIST curve P-256" },
+	{5, { 0x2b, 0x81, 0x04, 0x00, 0x22, 0x00, 0x00, 0x00, 0x00, 0x00 }, "NIST curve P-384" },
+	{5, { 0x2b, 0x81, 0x04, 0x00, 0x23, 0x00, 0x00, 0x00, 0x00, 0x00 }, "NIST curve P-521" },
+	{0, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, "Unknown curve" }
+};
+
+public void
+ecc_curve_name(string str)
+{
+	int len = Getc();
+	string curve_name = "";
+	if (len > 0 && len <= ECC_CURVE_OID_MAX_LEN) {
+		int i;
+		unsigned char oid[ECC_CURVE_OID_MAX_LEN];
+		for (i = 0; i < len; i++) oid[i] = Getc();
+		for (i = 0; CURVE_OIDS[i].len > 0; i++) {
+			if (CURVE_OIDS[i].len == len) {
+				if (memcmp(oid, CURVE_OIDS[i].oid, len) == 0) {
+					break;
+				}
+			}
+		}
+		curve_name = CURVE_OIDS[i].name;
+	} else {
+		curve_name = "Unknown curve";
+	}
+	printf("\t%s(%s)\n", str, curve_name);
+}
 
 /*
  * Copyright (C) 1998 Kazuhiko Yamamoto
